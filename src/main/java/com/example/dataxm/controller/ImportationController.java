@@ -1,4 +1,4 @@
 package com.example.dataxm.controller;
 
-public class ImportaciónController {
+public class ImportationController {
 }
