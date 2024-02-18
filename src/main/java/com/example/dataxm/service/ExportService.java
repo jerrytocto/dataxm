@@ -24,7 +24,7 @@ public class ExportService {
     public ResponseDTO<PageDTO<ExportDTO>> getList(ExportFilterDTO dto){
 
         // Generamos la consulta
-        String sqlTemplate = "SELECT ex.item as item, ex.description as description, ex.fobValue as fobValue, " +
+        String sqlTemplate = "SELECT ex.id as id, ex.item as item, ex.description as description, ex.fobValue as fobValue, " +
                 "ex.netWeight as netWeight FROM ExportEntity ex ";
 
         // Agregamos las condiciones a la consulta
@@ -46,6 +46,7 @@ public class ExportService {
 
     public List<ExportDTO> buildDto(List<Tuple> result){
         return result.stream().map( x -> ExportDTO.builder()
+                        .id(x.get("id").toString())
                         .item(x.get("item").toString())
                         .description(x.get("description").toString())
                         .fobValue(Double.valueOf(x.get("fobValue").toString()))

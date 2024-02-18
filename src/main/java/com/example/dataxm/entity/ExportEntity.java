@@ -15,7 +15,7 @@ public class ExportEntity {
 
     @Id
     @Column(name = "ID")
-    private Integer id; // id
+    private String id; // id
 
     @Column(name = "PART_NANDI")
     private String item; // Partida

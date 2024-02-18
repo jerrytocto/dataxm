@@ -10,5 +10,5 @@ public class ExportFilterDTO {
     private String description;
     private String year;
     private Integer page;
-    private Integer Size;
+    private Integer size;
 }

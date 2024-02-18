@@ -9,6 +9,7 @@ import lombok.Setter;
 @Builder
 public class ExportDTO {
 
+    private String id;
     private String item; // Item
     private String description; //Descripción comercial
     private Double fobValue; // Valor fob de la serie
