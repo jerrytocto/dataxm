@@ -5,8 +5,12 @@ import java.util.Objects;
 
 public class ConfigTool {
 
-    public static List<String> addFilterToPredicate(List<String> predicates, String path, Object filter) {
+    public static void addFilterToPredicate(List<String> predicates, String path, Object filter) {
         if (Objects.nonNull(filter) && filter != "") predicates.add(path);
-        return predicates;
+    }
+
+    public static String validateNotNullReturn(Object data, String returnNull){
+        if(data != null) return data.toString();
+        return returnNull;
     }
 }

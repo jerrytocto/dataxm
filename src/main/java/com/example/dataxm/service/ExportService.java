@@ -25,7 +25,9 @@ public class ExportService {
 
         // Generamos la consulta
         String sqlTemplate = "SELECT ex.id as id, ex.item as item, ex.description as description, ex.fobValue as fobValue, " +
-                "ex.netWeight as netWeight FROM ExportEntity ex ";
+                "ex.netWeight as netWeight, p.sector as sector, p.product as product " +
+                "FROM ExportEntity ex " +
+                "LEFT JOIN ProductsEntity p ON p.item = ex.item ";
 
         // Agregamos las condiciones a la consulta
         List<String> predicates =new ArrayList<>();
@@ -51,6 +53,8 @@ public class ExportService {
                         .description(x.get("description").toString())
                         .fobValue(Double.valueOf(x.get("fobValue").toString()))
                         .netWeight(Double.valueOf(x.get("netWeight").toString()))
+                        .sector(ConfigTool.validateNotNullReturn(x.get("sector"),null))
+                        .product(ConfigTool.validateNotNullReturn(x.get("product"),null))
                         .build()).collect(Collectors.toList());
     }
 }

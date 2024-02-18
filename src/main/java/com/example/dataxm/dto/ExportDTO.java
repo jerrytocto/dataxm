@@ -14,4 +14,6 @@ public class ExportDTO {
     private String description; //Descripción comercial
     private Double fobValue; // Valor fob de la serie
     private Double netWeight; // Peso neto
+    private String sector; // Sector
+    private String product; // Producto
 }
