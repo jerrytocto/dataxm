@@ -27,7 +27,7 @@ public class ExportEntity {
     private Double fobValue; // Valor fob de la serie
 
     @Column(name = "VPESNET")
-    private Double netWeight; // Peso neto
+        private Double netWeight; // Peso neto
 
     @Column(name = "FANO")
     private String year;
