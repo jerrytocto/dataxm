@@ -4,8 +4,10 @@ import com.example.dataxm.dto.importdto.ImportHomeDTO;
 import com.example.dataxm.dto.importdto.ImportHomeDTOTwo;
 import com.example.dataxm.entity.ImportEntity;
 import jakarta.persistence.Tuple;
+import jakarta.persistence.TypedQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -30,4 +32,16 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
             " WHERE YEAR(imp.date) = :year"
     )
     Tuple findImportHomeDataByYeartwo(Integer year);
+
+
+    @Query("SELECT imp.id as id, imp.partida as departure, imp.description as description, SUM(imp.fobValue) as fobValue, " +
+            "SUM(imp.netWeight) as netWeight, SUM(imp.securityValue) as securityValue, SUM(imp.fleteValue) as fleteValue, " +
+            "p.sector as sector "+
+            "FROM ImportEntity imp " +
+            "INNER JOIN ProductsEntity p ON p.item = imp.partida "+
+            "WHERE imp.description like CONCAT('%', :descrip, '%') AND YEAR(imp.date)= :year "+
+            "GROUP BY imp.partida"
+    )
+    List<Tuple> findImportWhitProducts(@Param("descrip") String descrip, @Param("year") int year);
+
 }

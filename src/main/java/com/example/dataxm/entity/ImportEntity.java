@@ -25,7 +25,7 @@ public class ImportEntity {
     @Column(name = "CODI_ADUAN")
     private String customsCode;
 
-    @Column(name = "DESC_COM")
+    @Column(name = "DESC_COMER")
     private String description; //Descripción comercial
 
     @Column(name = "FOB_DOLPOL")
