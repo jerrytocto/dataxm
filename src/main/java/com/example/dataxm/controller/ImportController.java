@@ -7,6 +7,7 @@ import com.example.dataxm.dto.importdto.ImportFirstLevelDTO;
 import com.example.dataxm.dto.importdto.ImportHomeDTO;
 import com.example.dataxm.dto.importdto.ImportHomeDTOTwo;
 import com.example.dataxm.service.importservice.HomeService;
+import com.example.dataxm.service.importservice.ImportPartidaService;
 import com.example.dataxm.service.importservice.ImportProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
@@ -24,6 +25,9 @@ public class ImportController {
     @Autowired
     private ImportProductService importProductService;
 
+    @Autowired
+    private ImportPartidaService importPartidaService;
+
     /*
     @GetMapping("/{year}")
     public ResponseDTO<ImportHomeDTO> homeImport(@PathVariable Integer year) {
@@ -39,7 +43,12 @@ public class ImportController {
     }
 
     @GetMapping("/products")
-    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescription(@RequestBody ExportFilterDTO exportFilterDTO){
+    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfProducts(@RequestBody ExportFilterDTO exportFilterDTO){
         return importProductService.getListProductsWithYear(exportFilterDTO);
+    }
+
+    @GetMapping("/partida")
+    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfPartida(@RequestBody ExportFilterDTO exportFilterDTO){
+        return importPartidaService.getListProductsWithYear(exportFilterDTO);
     }
 }

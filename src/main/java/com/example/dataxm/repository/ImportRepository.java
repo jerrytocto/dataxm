@@ -44,4 +44,13 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
     )
     List<Tuple> findImportWhitProducts(@Param("descrip") String descrip, @Param("year") int year);
 
+
+    @Query(value = "SELECT imp.id as id, imp.PART_NANDI as departure, imp.desc_comer as description, SUM(imp.FOB_DOLPOL) as fobValue, \n" +
+            "            SUM(imp.PESO_NETO) as netWeight, SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
+            "            FROM importa imp \n" +
+            "            WHERE imp.part_nandi LIKE CONCAT('%', :parti, '%') AND YEAR(imp.FECH_INGSI)= :year\n" +
+            "            GROUP BY imp.PART_NANDI; ",
+
+        nativeQuery = true)
+    List<Tuple> findImportWhitPartida(@Param("parti") String parti, @Param("year") int year);
 }
