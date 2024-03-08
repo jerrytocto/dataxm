@@ -44,10 +44,19 @@ public class ImportCountryService implements ImportFirstLevelCountryService {
 
         } else {
 
-            resultList = importRepository.findImportWithCountry(dto.getCountry(), Integer.parseInt(dto.getYear()));
+            //Buscar país en la tabla pais usando el campo namepais
+            Optional<List<Country>> foundCounties = importCountryRepository.findByCountryNameContaining(dto.getCountry());
+
+            //No existen registros en la base de datos
+            if(foundCounties.get().size()==0)
+                return new ResponseDTO<>(Constants.HTTP_STATUS_SUCCESSFUL, "No existen registros");
+
+            //Por cada uno de los registro devueltos consulta por su id
+            for (Country country : foundCounties.get()){
+                resultList.add(importRepository.findImportWithCountry(country.getId(), Integer.parseInt(dto.getYear())));
+            }
 
         }
-
 
         // Aplicar paginación a los resultados
         int totalResults = resultList.size();
@@ -73,8 +82,9 @@ public class ImportCountryService implements ImportFirstLevelCountryService {
             BigDecimal fobTotal = getValueAsBigDecimal(imp.get("fobValue")).add(getValueAsBigDecimal(imp.get("securityValue"))).add(getValueAsBigDecimal(imp.get("fleteValue")));
             BigDecimal netWeight = getValueAsBigDecimal(imp.get("netWeight"));
 
+            Optional<Country> foundCountry = importCountryRepository.findById(imp.get("countryId").toString());
 
-            importDto.setCountry(imp.get("country").toString());
+            if(foundCountry.isPresent()) importDto.setCountry(foundCountry.get().getCountryName());
             importDto.setYear(imp.get("years").toString());
             importDto.setFobValue(fobTotal);
             importDto.setNetWeight(netWeight);

@@ -16,4 +16,9 @@ public interface ImportCountryRepository extends JpaRepository<Country, String> 
     @Query("findByNombrePaisLike(:country)")
     Optional<List<Country>> findByCountryNameLike(@Param("country") String country);
 */
+
+    Optional<Country> findById(@Param("country") String country);
+
+
+    Optional<List<Country>> findByCountryNameContaining(String country);
 }

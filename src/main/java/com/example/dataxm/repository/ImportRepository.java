@@ -51,16 +51,16 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
     List<Tuple> findImportWhitPartida(@Param("parti") String parti, @Param("year") int year);
 
 
-    @Query(value = "SELECT imp.PAIS_ORIGE as country, YEAR(imp.FECH_INGSI) as years, SUM(imp.FOB_DOLPOL) as fobValue, \n" +
+    @Query(value = "SELECT imp.PAIS_ORIGE as countryId, YEAR(imp.FECH_INGSI) as years, SUM(imp.FOB_DOLPOL) as fobValue, \n" +
             "            SUM(imp.PESO_NETO) as netWeight, SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
             "            FROM importa imp \n" +
             "            WHERE imp.PAIS_ORIGE like CONCAT ('%', :country, '%') AND YEAR(imp.FECH_INGSI)= :year\n" +
             "            GROUP BY imp.PAIS_ORIGE",
         nativeQuery = true
     )
-    List<Tuple> findImportWithCountry(@Param("country") String country, @Param("year") int year);
+    Tuple findImportWithCountry(@Param("country") String country, @Param("year") int year);
 
-    @Query(value = "SELECT imp.PAIS_ORIGE as country, YEAR(imp.FECH_INGSI) as years,SUM(imp.FOB_DOLPOL) as fobValue, \n" +
+    @Query(value = "SELECT imp.PAIS_ORIGE as countryId, YEAR(imp.FECH_INGSI) as years,SUM(imp.FOB_DOLPOL) as fobValue, \n" +
             "            SUM(imp.PESO_NETO) as netWeight, SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
             "            FROM importa imp \n" +
             "            WHERE YEAR(imp.FECH_INGSI)= :year\n" +
