@@ -3,10 +3,9 @@ package com.example.dataxm.controller;
 import com.example.dataxm.dto.ExportFilterDTO;
 import com.example.dataxm.dto.PageDTO;
 import com.example.dataxm.dto.ResponseDTO;
-import com.example.dataxm.dto.importdto.ImportFirstLevelDTO;
-import com.example.dataxm.dto.importdto.ImportHomeDTO;
-import com.example.dataxm.dto.importdto.ImportHomeDTOTwo;
+import com.example.dataxm.dto.importdto.*;
 import com.example.dataxm.service.importservice.HomeService;
+import com.example.dataxm.service.importservice.ImportCompanyService;
 import com.example.dataxm.service.importservice.ImportPartidaService;
 import com.example.dataxm.service.importservice.ImportProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,9 @@ public class ImportController {
 
     @Autowired
     private ImportPartidaService importPartidaService;
+
+    @Autowired
+    private ImportCompanyService importCompanyService;
 
     /*
     @GetMapping("/{year}")
@@ -50,5 +52,10 @@ public class ImportController {
     @GetMapping("/partida")
     public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfPartida(@RequestBody ExportFilterDTO exportFilterDTO){
         return importPartidaService.getListProductsWithYear(exportFilterDTO);
+    }
+
+    @GetMapping("/company")
+    public ResponseDTO<PageDTO<ImportFirstLevelCompanyDTO>> importsWithYearAndDescriptionOfCompany(@RequestBody ImportFilterCompanyDTO exportFilterDTO){
+        return importCompanyService.getListProductsWithCompany(exportFilterDTO);
     }
 }
