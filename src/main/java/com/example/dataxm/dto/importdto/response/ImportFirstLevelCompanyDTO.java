@@ -1,4 +1,4 @@
-package com.example.dataxm.dto.importdto;
+package com.example.dataxm.dto.importdto.response;
 
 import lombok.*;
 

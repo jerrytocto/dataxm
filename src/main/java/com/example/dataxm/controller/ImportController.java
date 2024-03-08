@@ -3,13 +3,14 @@ package com.example.dataxm.controller;
 import com.example.dataxm.dto.ExportFilterDTO;
 import com.example.dataxm.dto.PageDTO;
 import com.example.dataxm.dto.ResponseDTO;
-import com.example.dataxm.dto.importdto.*;
-import com.example.dataxm.service.importservice.HomeService;
-import com.example.dataxm.service.importservice.ImportCompanyService;
-import com.example.dataxm.service.importservice.ImportPartidaService;
-import com.example.dataxm.service.importservice.ImportProductService;
+import com.example.dataxm.dto.importdto.request.ImportFilterCompanyDTO;
+import com.example.dataxm.dto.importdto.request.ImportFilterCountryDTO;
+import com.example.dataxm.dto.importdto.response.ImportFirstLevelCompanyDTO;
+import com.example.dataxm.dto.importdto.response.ImportFirstLevelCountryDTO;
+import com.example.dataxm.dto.importdto.response.ImportFirstLevelDTO;
+import com.example.dataxm.dto.importdto.response.ImportHomeDTOTwo;
+import com.example.dataxm.service.importservice.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -29,6 +30,9 @@ public class ImportController {
 
     @Autowired
     private ImportCompanyService importCompanyService;
+
+    @Autowired
+    private ImportCountryService importCountryService;
 
     /*
     @GetMapping("/{year}")
@@ -57,5 +61,10 @@ public class ImportController {
     @GetMapping("/company")
     public ResponseDTO<PageDTO<ImportFirstLevelCompanyDTO>> importsWithYearAndDescriptionOfCompany(@RequestBody ImportFilterCompanyDTO exportFilterDTO){
         return importCompanyService.getListProductsWithCompany(exportFilterDTO);
+    }
+
+    @GetMapping("/country")
+    public ResponseDTO<PageDTO<ImportFirstLevelCountryDTO>> importsWithYearAndDescriptionOfCountry(@RequestBody ImportFilterCountryDTO exportFilterDTO){
+        return importCountryService.getListProductsWithCompany(exportFilterDTO);
     }
 }

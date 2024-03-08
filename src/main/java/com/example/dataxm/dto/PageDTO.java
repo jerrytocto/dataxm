@@ -1,6 +1,5 @@
 package com.example.dataxm.dto;
 
-import com.example.dataxm.dto.importdto.ImportFirstLevelDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

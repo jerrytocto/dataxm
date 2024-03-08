@@ -1,16 +1,12 @@
 package com.example.dataxm.repository;
 
-import com.example.dataxm.dto.importdto.ImportHomeDTO;
-import com.example.dataxm.dto.importdto.ImportHomeDTOTwo;
 import com.example.dataxm.entity.ImportEntity;
 import jakarta.persistence.Tuple;
-import jakarta.persistence.TypedQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 @Repository
@@ -53,4 +49,23 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
 
         nativeQuery = true)
     List<Tuple> findImportWhitPartida(@Param("parti") String parti, @Param("year") int year);
+
+
+    @Query(value = "SELECT imp.PAIS_ORIGE as country, YEAR(imp.FECH_INGSI) as years, SUM(imp.FOB_DOLPOL) as fobValue, \n" +
+            "            SUM(imp.PESO_NETO) as netWeight, SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
+            "            FROM importa imp \n" +
+            "            WHERE imp.PAIS_ORIGE like CONCAT ('%', :country, '%') AND YEAR(imp.FECH_INGSI)= :year\n" +
+            "            GROUP BY imp.PAIS_ORIGE",
+        nativeQuery = true
+    )
+    List<Tuple> findImportWithCountry(@Param("country") String country, @Param("year") int year);
+
+    @Query(value = "SELECT imp.PAIS_ORIGE as country, YEAR(imp.FECH_INGSI) as years,SUM(imp.FOB_DOLPOL) as fobValue, \n" +
+            "            SUM(imp.PESO_NETO) as netWeight, SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
+            "            FROM importa imp \n" +
+            "            WHERE YEAR(imp.FECH_INGSI)= :year\n" +
+            "            GROUP BY imp.PAIS_ORIGE",
+            nativeQuery = true
+    )
+    List<Tuple> findImportWithCountryOnlyYear(@Param("year") int year);
 }

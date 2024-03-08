@@ -2,9 +2,8 @@ package com.example.dataxm.service.importservice;
 
 import com.example.dataxm.dto.PageDTO;
 import com.example.dataxm.dto.ResponseDTO;
-import com.example.dataxm.dto.importdto.ImportFilterCompanyDTO;
-import com.example.dataxm.dto.importdto.ImportFirstLevelCompanyDTO;
-import com.example.dataxm.dto.importdto.ImportFirstLevelDTO;
+import com.example.dataxm.dto.importdto.request.ImportFilterCompanyDTO;
+import com.example.dataxm.dto.importdto.response.ImportFirstLevelCompanyDTO;
 import com.example.dataxm.entity.Company;
 import jakarta.persistence.Tuple;
 

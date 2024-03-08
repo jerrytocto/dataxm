@@ -1,10 +1,5 @@
 package com.example.dataxm.repository;
 
-import com.example.dataxm.dto.ExportFilterDTO;
-import com.example.dataxm.dto.PageDTO;
-import com.example.dataxm.dto.ResponseDTO;
-import com.example.dataxm.dto.importdto.ImportFilterCompanyDTO;
-import com.example.dataxm.dto.importdto.ImportFirstLevelDTO;
 import com.example.dataxm.entity.Company;
 import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;

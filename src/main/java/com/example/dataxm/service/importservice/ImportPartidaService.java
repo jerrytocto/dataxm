@@ -4,7 +4,7 @@ import com.example.dataxm.base.Constants;
 import com.example.dataxm.dto.ExportFilterDTO;
 import com.example.dataxm.dto.PageDTO;
 import com.example.dataxm.dto.ResponseDTO;
-import com.example.dataxm.dto.importdto.ImportFirstLevelDTO;
+import com.example.dataxm.dto.importdto.response.ImportFirstLevelDTO;
 import com.example.dataxm.repository.ImportRepository;
 import jakarta.persistence.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
