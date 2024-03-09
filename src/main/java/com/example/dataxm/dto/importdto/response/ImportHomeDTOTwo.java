@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ImportHomeDTOTwo {
 
+    private String description;
+    private String year ;
     private int departure; //Número de partidas
     private int customs ;  // Número de aduanass
     private int companies; // Número de empresas

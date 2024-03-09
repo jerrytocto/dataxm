@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ImportRepository extends JpaRepository<ImportEntity, String> {
@@ -68,4 +69,16 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
             nativeQuery = true
     )
     List<Tuple> findImportWithCountryOnlyYear(@Param("year") int year);
+
+
+    @Query("SELECT imp.description as description, YEAR(imp.date) as year, COUNT(DISTINCT imp.partida) as departure, " +
+            "COUNT(DISTINCT imp.importCompany) as companies, COUNT(DISTINCT imp.originCountry) as markets," +
+            "SUM(imp.netWeight) as netWeight, SUM(imp.securityValue) as securityValue, SUM(imp.fleteValue) as fleteValue, " +
+            "SUM(imp.fobValue) as valueFOB "+
+            "FROM ImportEntity imp "+
+            " WHERE imp.description = :productName AND YEAR(imp.date) = :year "+
+            " GROUP BY imp.description"
+
+    )
+    Optional<Tuple> findByProductsIdAndYear(String productName, int year);
 }
