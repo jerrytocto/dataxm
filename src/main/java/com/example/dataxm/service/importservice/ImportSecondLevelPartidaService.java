@@ -14,22 +14,23 @@ import java.time.Year;
 import java.util.Optional;
 
 @Service
-public class ImportSecondLevelProductsService {
+public class ImportSecondLevelPartidaService {
 
     @Autowired
     private ImportRepository importRepository;
 
+
     //Método que busca al producto por su id y por su año
-    public ResponseDTO<ImportHomeDTOTwo> findProductsByDescriptionAndUser(ImportSecondLevelFilterDTO dto){
+    public ResponseDTO<ImportHomeDTOTwo> findByPartidaAndanio(ImportSecondLevelFilterDTO dto){
 
         if(dto.getFilter().isEmpty() || dto.getFilter().isBlank())
-            return new ResponseDTO<>(Constants.HTTP_STATUS_WARNING, "Se debe especificar un producto");
+            return new ResponseDTO<>(Constants.HTTP_STATUS_WARNING, "Se debe especificar una partida");
 
         if(dto.getYear() > Year.now().getValue())
             return new ResponseDTO<>(Constants.HTTP_STATUS_WARNING, "El año debe ser menor que:  "+ Year.now().getValue());
 
 
-        Optional<Tuple>  sqlResult = importRepository.findByProductsIdAndYear(dto.getFilter(), dto.getYear());
+        Optional<Tuple> sqlResult = importRepository.secondLevelDeparture(dto.getFilter(), dto.getYear());
 
         if(!sqlResult.isPresent()) return new ResponseDTO<>(Constants.HTTP_STATUS_WARNING, "No se encontraron registros");
 
@@ -39,6 +40,7 @@ public class ImportSecondLevelProductsService {
                 .departure(getValueAsInteger(sqlResult.get().get("departure")))
                 .companies(getValueAsInteger(sqlResult.get().get("companies")))
                 .markets(getValueAsInteger(sqlResult.get().get("markets")))
+                .agentAdua(getValueAsInteger(sqlResult.get().get("agentAdua")))
                 .valueFOB(getValueAsBigDecimal(sqlResult.get().get("valueFOB")))
                 .securityValue(getValueAsBigDecimal(sqlResult.get().get("securityValue")))
                 .fleteValue(getValueAsBigDecimal(sqlResult.get().get("fleteValue")))
@@ -61,5 +63,4 @@ public class ImportSecondLevelProductsService {
         }
         return null;
     }
-
 }

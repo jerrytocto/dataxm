@@ -26,7 +26,7 @@ public class ImportProductService implements ImportFirstLevelService{
     public ResponseDTO<PageDTO<ImportFirstLevelDTO>> getListProductsWithYear(ExportFilterDTO dto) {
 
         if(dto.getYear().isEmpty() || dto.getYear().isBlank()) dto.setYear(Year.now().toString());
-        if(dto.getDescription().isEmpty() || dto.getDescription().isBlank()) dto.setDescription("palta");
+        if(dto.getDescription().isEmpty() || dto.getDescription().isBlank()) dto.setDescription("laptop");
 
         List<Tuple> resultList = importRepository.findImportWhitProducts(dto.getDescription(),Integer.parseInt(dto.getYear()) );
 

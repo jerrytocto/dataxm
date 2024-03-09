@@ -6,10 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ImportSecondFilterProductDTO {
+public class ImportSecondLevelFilterDTO {
 
     @NotNull
-    private String productName ;
+    private String filter ;
 
     @NotNull
     private Integer year ;

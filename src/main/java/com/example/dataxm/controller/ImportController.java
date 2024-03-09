@@ -5,7 +5,7 @@ import com.example.dataxm.dto.PageDTO;
 import com.example.dataxm.dto.ResponseDTO;
 import com.example.dataxm.dto.importdto.request.ImportFilterCompanyDTO;
 import com.example.dataxm.dto.importdto.request.ImportFilterCountryDTO;
-import com.example.dataxm.dto.importdto.request.ImportSecondFilterProductDTO;
+import com.example.dataxm.dto.importdto.request.ImportSecondLevelFilterDTO;
 import com.example.dataxm.dto.importdto.response.ImportFirstLevelCompanyDTO;
 import com.example.dataxm.dto.importdto.response.ImportFirstLevelCountryDTO;
 import com.example.dataxm.dto.importdto.response.ImportFirstLevelDTO;
@@ -38,6 +38,9 @@ public class ImportController {
     @Autowired
     private ImportSecondLevelProductsService importSecondLevelProductsService;
 
+    @Autowired
+    private ImportSecondLevelPartidaService importSecondLevelPartidaService;
+
     /*
     @GetMapping("/{year}")
     public ResponseDTO<ImportHomeDTO> homeImport(@PathVariable Integer year) {
@@ -57,7 +60,7 @@ public class ImportController {
         return importProductService.getListProductsWithYear(exportFilterDTO);
     }
 
-    @GetMapping("/partida")
+    @GetMapping("/partidas")
     public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfPartida(@RequestBody ExportFilterDTO exportFilterDTO){
         return importPartidaService.getListProductsWithYear(exportFilterDTO);
     }
@@ -73,8 +76,13 @@ public class ImportController {
     }
 
     @GetMapping("/products/{id}")
-    public ResponseDTO<ImportHomeDTOTwo> secondLevelProducts(@PathVariable Integer id, @RequestBody ImportSecondFilterProductDTO dto) throws SQLException {
+    public ResponseDTO<ImportHomeDTOTwo> secondLevelProducts(@PathVariable Integer id, @RequestBody ImportSecondLevelFilterDTO dto) throws SQLException {
         return importSecondLevelProductsService.findProductsByDescriptionAndUser(dto);
+    }
+
+    @GetMapping("/partidas/{numberPartida}")
+    public ResponseDTO<ImportHomeDTOTwo> secondLevelPartida(@PathVariable Integer numberPartida, @RequestBody ImportSecondLevelFilterDTO dto) throws SQLException {
+        return importSecondLevelPartidaService.findByPartidaAndanio(dto);
     }
 
 }

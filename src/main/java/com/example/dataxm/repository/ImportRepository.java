@@ -17,7 +17,8 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
             "imp.netWeight as netWeight, imp.securityValue as securityValue, imp.fleteValue as fleteValue, " +
             "imp.importCompany as importCompany, imp.originCountry as originCountry " +
             "FROM ImportEntity imp " +
-            "WHERE YEAR(imp.date) = :year")
+            "WHERE YEAR(imp.date) = :year"
+    )
     List<Tuple> findImportHomeDataByYear(Integer year);
 
 
@@ -37,7 +38,8 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
             "FROM ImportEntity imp " +
             "INNER JOIN ProductsEntity p ON p.item = imp.partida "+
             "WHERE imp.description like CONCAT('%', :descrip, '%') AND YEAR(imp.date)= :year "+
-            "GROUP BY imp.partida"
+            "GROUP BY imp.partida " +
+            "ORDER BY SUM(imp.fobValue) DESC"
     )
     List<Tuple> findImportWhitProducts(@Param("descrip") String descrip, @Param("year") int year);
 
@@ -46,9 +48,10 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
             "            SUM(imp.PESO_NETO) as netWeight, SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
             "            FROM importa imp \n" +
             "            WHERE imp.part_nandi LIKE CONCAT('%', :parti, '%') AND YEAR(imp.FECH_INGSI)= :year\n" +
-            "            GROUP BY imp.PART_NANDI; ",
+            "            GROUP BY imp.PART_NANDI " +
+            "            ORDER BY SUM(imp.FOB_DOLPOL) DESC ",
 
-        nativeQuery = true)
+            nativeQuery = true)
     List<Tuple> findImportWhitPartida(@Param("parti") String parti, @Param("year") int year);
 
 
@@ -65,7 +68,8 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
             "            SUM(imp.PESO_NETO) as netWeight, SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
             "            FROM importa imp \n" +
             "            WHERE YEAR(imp.FECH_INGSI)= :year\n" +
-            "            GROUP BY imp.PAIS_ORIGE",
+            "            GROUP BY imp.PAIS_ORIGE \n" +
+            "            ORDER BY SUM(imp.FOB_DOLPOL) DESC " ,
             nativeQuery = true
     )
     List<Tuple> findImportWithCountryOnlyYear(@Param("year") int year);
@@ -81,4 +85,15 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
 
     )
     Optional<Tuple> findByProductsIdAndYear(String productName, int year);
+
+
+    @Query(value = "SELECT imp.description as description, YEAR(imp.date) as year, COUNT(DISTINCT imp.partida) as departure, " +
+            "COUNT(DISTINCT imp.importCompany) as companies, COUNT(DISTINCT imp.originCountry) as markets, COUNT(DISTINCT imp.agentAdua) as agentAdua, " +
+            "SUM(imp.netWeight) as netWeight, SUM(imp.securityValue) as securityValue, SUM(imp.fleteValue) as fleteValue, " +
+            "SUM(imp.fobValue) as valueFOB "+
+            "FROM ImportEntity imp "+
+            " WHERE imp.partida = :departure AND YEAR(imp.date) = :year "+
+            " GROUP BY imp.partida"
+    )
+    Optional<Tuple> secondLevelDeparture(String departure, int year);
 }
