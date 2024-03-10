@@ -29,10 +29,15 @@ public class ImportCompanyService implements ImportFirstLevelCompanyService{
     public ResponseDTO<PageDTO<ImportFirstLevelCompanyDTO>> getListProductsWithCompany(ImportFilterCompanyDTO dto) {
 
         Optional<Company> foundCompany = Optional.of(new Company());
-        Optional<List<Company>> listFountCompany =  Optional.of(new ArrayList<>());
+        //Optional<List<Company>> listFountCompany =  Optional.of(new ArrayList<>());
         List<Tuple> resultList = new ArrayList<>() ;
 
         if(dto.getYear().isEmpty() || dto.getYear().isBlank()) dto.setYear(Year.now().toString());
+
+        //El campo company y ruc están vacíos
+        if(dto.getRuc().isEmpty() && dto.getCompany().isEmpty()){
+            resultList = importCompanyRepository.findImportsByCompanyOnlyYear(Integer.parseInt(dto.getYear()));
+        }
 
         //El campo ruc no esté en blanco ni vacío
         if(!dto.getRuc().isBlank() && !dto.getRuc().isEmpty()) {
@@ -47,6 +52,7 @@ public class ImportCompanyService implements ImportFirstLevelCompanyService{
 
         //El campo company no esté en blanco ni vacío
         if(!dto.getCompany().isBlank() && !dto.getCompany().isEmpty()) resultList = consultDB(dto);
+
 
         // Aplicar paginación a los resultados
         int totalResults = resultList.size();
