@@ -38,4 +38,13 @@ public interface ImportCompanyRepository extends JpaRepository<Company, Integer>
             nativeQuery = true
     )
     List<Tuple> findImportsByCompanyOnlyYear(@Param("year") int year);
+
+    @Query("SELECT COUNT(DISTINCT imp.partida) as departure, COUNT(DISTINCT imp.customsCode) as partnandi, " +
+            "COUNT(DISTINCT imp.description) as numProducts," +
+            "SUM(imp.netWeight) as netWeight, SUM(imp.securityValue) as securityValue, SUM(imp.fleteValue) as fleteValue, " +
+            "SUM(imp.fobValue) as valueFOB "+
+            "FROM ImportEntity imp "+
+            " WHERE YEAR(imp.date) = :year AND imp.company = :companyName"
+    )
+    Optional<Tuple> secondLevelCompany(int year, String companyName);
 }

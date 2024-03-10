@@ -52,4 +52,7 @@ public class ImportEntity {
     @Column(name = "CODI_AGENT")
     private String agentAdua;
 
+    @Column(name = "DNOMBRE")
+    private String company;
+
 }

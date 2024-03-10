@@ -44,6 +44,9 @@ public class ImportController {
     @Autowired
     private ImportSecondLevelCountryService importSecondLevelCountryService;
 
+    @Autowired
+    private ImportSecondLevelCompanyService importSecondLevelCompanyService;
+
     /*
     @GetMapping("/{year}")
     public ResponseDTO<ImportHomeDTO> homeImport(@PathVariable Integer year) {
@@ -68,7 +71,7 @@ public class ImportController {
         return importPartidaService.getListProductsWithYear(exportFilterDTO);
     }
 
-    @GetMapping("/company")
+    @GetMapping("/companies")
     public ResponseDTO<PageDTO<ImportFirstLevelCompanyDTO>> importsWithYearAndDescriptionOfCompany(@RequestBody ImportFilterCompanyDTO exportFilterDTO){
         return importCompanyService.getListProductsWithCompany(exportFilterDTO);
     }
@@ -91,6 +94,11 @@ public class ImportController {
     @GetMapping("/country/{codCountry}")
     public ResponseDTO<ImportHomeDTOTwo> secondLevelCountry(@PathVariable Integer codCountry, @RequestBody ImportSecondLevelFilterDTO dto){
         return importSecondLevelCountryService.findByPartidaAndanio(dto);
+    }
+
+    @GetMapping("/companies/{ruc}")
+    public ResponseDTO<ImportHomeDTOTwo> secondLevelCompany(@PathVariable Integer ruc, @RequestBody ImportSecondLevelFilterDTO dto){
+        return importSecondLevelCompanyService.findByCompanyAndYear(dto);
     }
 
 }

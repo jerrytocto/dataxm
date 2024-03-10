@@ -19,6 +19,7 @@ public class ImportHomeDTOTwo {
     private int companies; // Número de empresas
     private int markets ;  // Número de mercados
     private int agentAdua; //Número de aduanas
+    private int numProducts ; // Número de productos
     private BigDecimal netWeight; //Total peso neto
     private BigDecimal securityValue; //Total valor seguro
     private BigDecimal fleteValue; //Total valor flete
