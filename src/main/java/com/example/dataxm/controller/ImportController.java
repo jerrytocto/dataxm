@@ -41,6 +41,9 @@ public class ImportController {
     @Autowired
     private ImportSecondLevelPartidaService importSecondLevelPartidaService;
 
+    @Autowired
+    private ImportSecondLevelCountryService importSecondLevelCountryService;
+
     /*
     @GetMapping("/{year}")
     public ResponseDTO<ImportHomeDTO> homeImport(@PathVariable Integer year) {
@@ -83,6 +86,11 @@ public class ImportController {
     @GetMapping("/partidas/{numberPartida}")
     public ResponseDTO<ImportHomeDTOTwo> secondLevelPartida(@PathVariable Integer numberPartida, @RequestBody ImportSecondLevelFilterDTO dto) throws SQLException {
         return importSecondLevelPartidaService.findByPartidaAndanio(dto);
+    }
+
+    @GetMapping("/country/{codCountry}")
+    public ResponseDTO<ImportHomeDTOTwo> secondLevelCountry(@PathVariable Integer codCountry, @RequestBody ImportSecondLevelFilterDTO dto){
+        return importSecondLevelCountryService.findByPartidaAndanio(dto);
     }
 
 }

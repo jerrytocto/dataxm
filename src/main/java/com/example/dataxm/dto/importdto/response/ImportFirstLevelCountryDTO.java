@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 public class ImportFirstLevelCountryDTO {
 
     private String country;
+    private String codCountry;
+    private String productName;
     private String year;
     private BigDecimal fobValue;
     private BigDecimal netWeight;

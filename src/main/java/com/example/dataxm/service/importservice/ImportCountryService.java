@@ -18,6 +18,7 @@ import java.math.RoundingMode;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,16 +43,21 @@ public class ImportCountryService implements ImportFirstLevelCountryService {
 
         } else {
 
-            //Buscar país en la tabla pais usando el campo namepais
+            //Buscar país en la tabla paises usando el campo namepais
             Optional<List<Country>> foundCounties = importCountryRepository.findByCountryNameContaining(dto.getCountry());
 
-            //No existen registros en la base de datos
-            if(foundCounties.get().size()==0)
-                return new ResponseDTO<>(Constants.HTTP_STATUS_SUCCESSFUL, "No existen registros");
+            //No existen registros con el pais en la base de datos
+            if(!foundCounties.isPresent())
+                return new ResponseDTO<>(Constants.HTTP_STATUS_SUCCESSFUL, "No existen registros para el país: " + dto.getCountry());
 
             //Por cada uno de los registro devueltos consulta por su id
             for (Country country : foundCounties.get()){
-                resultList.add(importRepository.findImportWithCountry(country.getId(), Integer.parseInt(dto.getYear())));
+
+                Optional<List<Tuple>> foundImportaciones = importRepository.findImportWithCountry(country.getId(), Integer.parseInt(dto.getYear()));
+                if (!foundImportaciones.isPresent())
+                    return new ResponseDTO<>(Constants.HTTP_STATUS_SUCCESSFUL, "No existen registros para el país: " + dto.getCountry());
+
+                resultList.addAll(foundImportaciones.get());
             }
 
         }
@@ -72,7 +78,7 @@ public class ImportCountryService implements ImportFirstLevelCountryService {
 
     @Override
     public List<ImportFirstLevelCountryDTO> buildDto(List<Tuple> result) {
-        return result.stream().map( imp -> {
+        return result.stream().filter(Objects::nonNull).map(imp -> {
 
             ImportFirstLevelCountryDTO importDto = new ImportFirstLevelCountryDTO();
 
@@ -80,14 +86,13 @@ public class ImportCountryService implements ImportFirstLevelCountryService {
             BigDecimal fobTotal = getValueAsBigDecimal(imp.get("fobValue")).add(getValueAsBigDecimal(imp.get("securityValue"))).add(getValueAsBigDecimal(imp.get("fleteValue")));
             BigDecimal netWeight = getValueAsBigDecimal(imp.get("netWeight"));
 
-            Optional<Country> foundCountry = importCountryRepository.findById(imp.get("countryId").toString());
-
-            if(foundCountry.isPresent()) importDto.setCountry(foundCountry.get().getCountryName());
+            importDto.setCodCountry(imp.get("codCountry").toString());
+            importDto.setCountry(imp.get("pais").toString());
+            importDto.setProductName(imp.get("productName").toString());
             importDto.setYear(imp.get("years").toString());
             importDto.setFobValue(fobTotal);
             importDto.setNetWeight(netWeight);
             if (netWeight != null) importDto.setFobPrice(fobTotal.divide(netWeight,3, RoundingMode.HALF_UP));
-
             return importDto;
         }).collect(Collectors.toList());
     }
