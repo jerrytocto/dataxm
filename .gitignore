@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+Dockerfile,
+docker-compose.yml,
+src/main/resources/application.properties
+target/dataxm-0.0.1-SNAPSHOT.jar,
+target/dataxm-0.0.1-SNAPSHOT.jar.original

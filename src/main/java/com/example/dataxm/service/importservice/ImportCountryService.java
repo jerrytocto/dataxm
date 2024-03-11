@@ -89,7 +89,6 @@ public class ImportCountryService implements ImportFirstLevelCountryService {
             importDto.setCodCountry(imp.get("codCountry").toString());
             importDto.setCountry(imp.get("pais").toString());
             importDto.setProductName(imp.get("productName").toString());
-            importDto.setYear(imp.get("years").toString());
             importDto.setFobValue(fobTotal);
             importDto.setNetWeight(netWeight);
             if (netWeight != null) importDto.setFobPrice(fobTotal.divide(netWeight,3, RoundingMode.HALF_UP));

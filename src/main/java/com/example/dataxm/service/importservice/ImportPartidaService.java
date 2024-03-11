@@ -29,9 +29,7 @@ public class ImportPartidaService implements ImportFirstLevelService{
         if(dto.getDescription().isEmpty() || dto.getDescription().isBlank()) dto.setDescription("6404190000");
 
         List<Tuple> resultList = importRepository.findImportWhitPartida(dto.getDescription(),Integer.parseInt(dto.getYear()) );
-        System.out.println("====================== SIZE =================================");
-        System.out.println(resultList.size());
-        System.out.println("====================== SIZE =================================");
+
         // Aplicar paginación a los resultados
         int totalResults = resultList.size();
         int pageSize = dto.getSize();
@@ -56,8 +54,6 @@ public class ImportPartidaService implements ImportFirstLevelService{
                     //Calcular el precio fob total
                     BigDecimal fobTotal = getValueAsBigDecimal(imp.get("fobValue")).add(getValueAsBigDecimal(imp.get("securityValue"))).add(getValueAsBigDecimal(imp.get("fleteValue")));
                     BigDecimal netWeight = getValueAsBigDecimal(imp.get("netWeight"));
-
-                    importDto.setId(imp.get("id").toString());
                     importDto.setDeparture(imp.get("departure").toString());
                     importDto.setProduct(imp.get("description").toString());
                     importDto.setFobValue(fobTotal);

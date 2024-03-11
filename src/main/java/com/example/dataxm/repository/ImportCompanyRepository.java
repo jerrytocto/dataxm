@@ -18,8 +18,8 @@ public interface ImportCompanyRepository extends JpaRepository<Company, Integer>
     Company findByBusinessNameContaining(String businessName);
 
 
-    @Query(value = "SELECT imp.dnombre as company, SUM(imp.FOB_DOLPOL) as fobValue, \n" +
-            "            SUM(imp.PESO_NETO) as netWeight, SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
+    @Query(value = "SELECT imp.dnombre as company, SUM(imp.FOB_DOLPOL) as fobValue, SUM(imp.PESO_NETO) as netWeight,\n" +
+            "            SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
             "            FROM importa imp \n" +
             "            WHERE imp.DNOMBRE like CONCAT('%', :compan, '%') AND YEAR(imp.FECH_INGSI)= :year\n" +
             "            GROUP BY imp.dnombre ",
@@ -29,8 +29,8 @@ public interface ImportCompanyRepository extends JpaRepository<Company, Integer>
     List<Tuple> findImportWhitCompany(@Param("compan") String compan, @Param("year") int year);
 
 
-    @Query(value = "SELECT imp.dnombre as company, SUM(imp.FOB_DOLPOL) as fobValue, \n" +
-            "                        SUM(imp.PESO_NETO) as netWeight, SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
+    @Query(value = "SELECT imp.dnombre as company, SUM(imp.FOB_DOLPOL) as fobValue, SUM(imp.PESO_NETO) as netWeight, \n" +
+            "                         SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue\n" +
             "                        FROM importa imp \n" +
             "                        WHERE YEAR(imp.FECH_INGSI)= :year\n" +
             "                        GROUP BY imp.dnombre \n" +
