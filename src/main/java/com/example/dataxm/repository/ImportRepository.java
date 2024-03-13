@@ -32,14 +32,15 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
     Tuple findImportHomeDataByYeartwo(Integer year);
 
 
-    @Query("SELECT imp.partida as departure, imp.description as description, SUM(imp.fobValue) as fobValue, " +
-            "SUM(imp.netWeight) as netWeight, SUM(imp.securityValue) as securityValue, SUM(imp.fleteValue) as fleteValue, " +
-            "p.sector as sector "+
-            "FROM ImportEntity imp " +
-            "INNER JOIN ProductsEntity p ON p.item = imp.partida "+
-            "WHERE imp.description like CONCAT('%', :descrip, '%') AND YEAR(imp.date)= :year "+
-            "GROUP BY imp.partida, imp.description, p.sector " +
-            "ORDER BY SUM(imp.fobValue) DESC"
+    @Query( value = "SELECT imp.PART_NANDI as departure, imp.DESC_COMER as description, SUM(imp.FOB_DOLPOL) as fobValue, \n" +
+            "            SUM(imp.PESO_NETO) as netWeight, SUM(imp.SEG_DOLAR) as securityValue, SUM(imp.FLE_DOLAR) as fleteValue, \n" +
+            "            p.sector as sector \n" +
+            "            FROM importa imp \n" +
+            "            INNER JOIN productos p ON p.partida_nandi = imp.PART_NANDI \n" +
+            "            WHERE imp.DESC_COMER like CONCAT('%', :descrip, '%') AND YEAR(imp.FECH_INGSI)= :year\n" +
+            "            GROUP BY imp.PART_NANDI, imp.DESC_COMER, p.sector \n" +
+            "            ORDER BY SUM(imp.FOB_DOLPOL) DESC",
+            nativeQuery = true
     )
     List<Tuple> findImportWhitProducts(@Param("descrip") String descrip, @Param("year") int year);
 
