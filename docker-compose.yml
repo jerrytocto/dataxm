@@ -15,6 +15,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - app_code:/app
+
     container_name: dataxm_back
     ports:
       - "8081:8081"
@@ -28,3 +31,4 @@ services:
 
 volumes:
   mysql_data:
+  app_code:
