@@ -47,7 +47,7 @@ public class ImportSecondLevelCountryService {
 
     public ImportHomeDTOTwo builDTO(Tuple result){
 
-        ImportHomeDTOTwo importHomeDTO = ImportHomeDTOTwo.builder()
+        return ImportHomeDTOTwo.builder()
                     .departure(getValueAsInteger(result.get("departure")))
                     .companies(getValueAsInteger(result.get("companies")))
                     .agentAdua(getValueAsInteger(result.get("customs")))
@@ -56,8 +56,6 @@ public class ImportSecondLevelCountryService {
                     .fleteValue(getValueAsBigDecimal(result.get("fleteValue")))
                     .netWeight(getValueAsBigDecimal(result.get("netWeight")))
                     .build();
-
-            return importHomeDTO;
     }
 
     private Integer getValueAsInteger(Object value) {
