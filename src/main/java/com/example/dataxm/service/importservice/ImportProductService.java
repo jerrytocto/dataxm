@@ -28,7 +28,7 @@ public class ImportProductService implements ImportFirstLevelService{
         if(dto.getYear().isEmpty() || dto.getYear().isBlank()) dto.setYear(Year.now().toString());
         if(dto.getDescription().isEmpty() || dto.getDescription().isBlank()) dto.setDescription("laptop");
 
-        List<Tuple> resultList = importRepository.findImportWhitProducts(dto.getDescription(),Integer.parseInt(dto.getYear()) );
+        List<Tuple> resultList = importRepository.findImportProductsFirstLevel(dto.getDescription(),Integer.parseInt(dto.getYear()) );
 
         // Aplicar paginación a los resultados
         int totalResults = resultList.size();
@@ -54,8 +54,6 @@ public class ImportProductService implements ImportFirstLevelService{
                     //Calcular el precio fob total
                     BigDecimal fobTotal = getValueAsBigDecimal(imp.get("fobValue")).add(getValueAsBigDecimal(imp.get("securityValue"))).add(getValueAsBigDecimal(imp.get("fleteValue")));
                     BigDecimal netWeight = getValueAsBigDecimal(imp.get("netWeight"));
-
-                    importDto.setId(imp.get("id").toString());
                     importDto.setDeparture(imp.get("departure").toString());
                     importDto.setProduct(imp.get("description").toString());
                     importDto.setFobValue(fobTotal);

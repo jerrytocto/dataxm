@@ -42,7 +42,7 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
             "            ORDER BY SUM(imp.FOB_DOLPOL) DESC",
             nativeQuery = true
     )
-    List<Tuple> findImportWhitProducts(@Param("descrip") String descrip, @Param("year") int year);
+    List<Tuple> findImportProductsFirstLevel(@Param("descrip") String descrip, @Param("year") int year);
 
 
     @Query(value = "SELECT  imp.PART_NANDI as departure, imp.desc_comer as description, SUM(imp.FOB_DOLPOL) as fobValue, \n" +
