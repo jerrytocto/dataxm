@@ -100,10 +100,4 @@ public class ImportController {
     public ResponseDTO<ImportHomeDTOTwo> secondLevelCompany(@PathVariable Integer ruc, @RequestBody ImportSecondLevelFilterDTO dto){
         return importSecondLevelCompanyService.findByCompanyAndYear(dto);
     }
-
-    @GetMapping("/saludar")
-    public ResponseDTO saludando(){
-        return new ResponseDTO<>(200,"Estoy saludando para probar");
-    }
-
 }
