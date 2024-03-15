@@ -99,7 +99,7 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
             "SUM(imp.fobValue) as valueFOB "+
             "FROM ImportEntity imp "+
             " WHERE imp.partida = :departure AND YEAR(imp.date) = :year "+
-            " GROUP BY imp.partida, YEAR(imp.date), SELECT imp.description"
+            " GROUP BY imp.partida, YEAR(imp.date), imp.description"
     )
     Optional<Tuple> secondLevelDeparture(String departure, int year);
 
