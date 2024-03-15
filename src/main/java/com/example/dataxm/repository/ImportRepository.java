@@ -93,13 +93,13 @@ public interface ImportRepository extends JpaRepository<ImportEntity, String> {
     Optional<Tuple> findByProductsIdAndYear(String productName, int year);
 
 
-    @Query(value = "SELECT imp.description as description, YEAR(imp.date) as year, COUNT(DISTINCT imp.partida) as departure, " +
+    @Query(value = "SELECT YEAR(imp.date) as year, COUNT(DISTINCT imp.partida) as departure, " +
             "COUNT(DISTINCT imp.importCompany) as companies, COUNT(DISTINCT imp.originCountry) as markets, COUNT(DISTINCT imp.agentAdua) as agentAdua, " +
             "SUM(imp.netWeight) as netWeight, SUM(imp.securityValue) as securityValue, SUM(imp.fleteValue) as fleteValue, " +
             "SUM(imp.fobValue) as valueFOB "+
             "FROM ImportEntity imp "+
             " WHERE imp.partida = :departure AND YEAR(imp.date) = :year "+
-            " GROUP BY imp.partida, YEAR(imp.date), imp.description"
+            " GROUP BY imp.partida, YEAR(imp.date)"
     )
     Optional<Tuple> secondLevelDeparture(String departure, int year);
 

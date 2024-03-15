@@ -35,7 +35,6 @@ public class ImportSecondLevelPartidaService {
         if(!sqlResult.isPresent()) return new ResponseDTO<>(Constants.HTTP_STATUS_WARNING, "No se encontraron registros");
 
         ImportHomeDTOTwo importHomeDTO = ImportHomeDTOTwo.builder()
-                .description(sqlResult.get().get("description").toString())
                 .year(sqlResult.get().get("year").toString())
                 .departure(getValueAsInteger(sqlResult.get().get("departure")))
                 .companies(getValueAsInteger(sqlResult.get().get("companies")))
