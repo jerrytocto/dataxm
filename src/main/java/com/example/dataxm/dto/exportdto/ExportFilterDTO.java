@@ -1,4 +1,4 @@
-package com.example.dataxm.dto;
+package com.example.dataxm.dto.exportdto;
 
 import lombok.Getter;
 import lombok.Setter;

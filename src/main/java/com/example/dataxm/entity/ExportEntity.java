@@ -27,9 +27,20 @@ public class ExportEntity {
     private Double fobValue; // Valor fob de la serie
 
     @Column(name = "VPESNET")
-        private Double netWeight; // Peso neto
+    private Double netWeight; // Peso neto
 
     @Column(name = "FANO")
     private String year;
 
+    @Column(name = "CPAIDES")
+    private String country;
+
+    @Column(name = "CAGE")
+    private String agentAdua;
+
+    @Column(name = "CEMPTRA")
+    private String company;
+
+    @Column(name = "UBIGEO")
+    private String ubigeo;
 }

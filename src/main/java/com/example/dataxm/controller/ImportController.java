@@ -1,6 +1,6 @@
 package com.example.dataxm.controller;
 
-import com.example.dataxm.dto.ExportFilterDTO;
+import com.example.dataxm.dto.exportdto.ExportFilterDTO;
 import com.example.dataxm.dto.PageDTO;
 import com.example.dataxm.dto.ResponseDTO;
 import com.example.dataxm.dto.importdto.request.ImportFilterCompanyDTO;

@@ -1,8 +1,9 @@
 package com.example.dataxm.service;
 
 import com.example.dataxm.base.Constants;
-import com.example.dataxm.dto.ExportDTO;
-import com.example.dataxm.dto.ExportFilterDTO;
+import com.example.dataxm.dto.exportdto.AnnualIndicatorsDTO;
+import com.example.dataxm.dto.exportdto.ExportDTO;
+import com.example.dataxm.dto.exportdto.ExportFilterDTO;
 import com.example.dataxm.dto.PageDTO;
 import com.example.dataxm.dto.ResponseDTO;
 import com.example.dataxm.utils.ConfigTool;
@@ -25,9 +26,9 @@ public class ExportService {
 
         // Generamos la consulta
         String sqlTemplate = "SELECT ex.id as id, ex.item as item, ex.description as description, ex.fobValue as fobValue, " +
-                "ex.netWeight as netWeight, p.sector as sector, p.product as product " +
-                "FROM ExportEntity ex " +
-                "LEFT JOIN ProductsEntity p ON p.item = ex.item ";
+                    "ex.netWeight as netWeight, p.sector as sector, p.product as product " +
+                    "FROM ExportEntity ex " +
+                    "LEFT JOIN ProductsEntity p ON p.item = ex.item ";
 
         // Agregamos las condiciones a la consulta
         List<String> predicates =new ArrayList<>();
@@ -41,20 +42,36 @@ public class ExportService {
         query.setFirstResult(dto.getPage()*dto.getSize());
         query.setMaxResults(dto.getSize());
 
-        PageDTO<ExportDTO> pageDTO =new PageDTO<>(buildDto(query.getResultList()),dto.getPage(),0);
+        PageDTO<ExportDTO> pageDTO =new PageDTO<>(ExportDTO.buildDto(query.getResultList()),dto.getPage(),0);
         return new ResponseDTO<>(Constants.HTTP_STATUS_SUCCESSFUL, pageDTO);
 
     }
 
-    public List<ExportDTO> buildDto(List<Tuple> result){
-        return result.stream().map( x -> ExportDTO.builder()
-                        .id(x.get("id").toString())
-                        .item(x.get("item").toString())
-                        .description(x.get("description").toString())
-                        .fobValue(Double.valueOf(x.get("fobValue").toString()))
-                        .netWeight(Double.valueOf(x.get("netWeight").toString()))
-                        .sector(ConfigTool.validateNotNullReturn(x.get("sector"),null))
-                        .product(ConfigTool.validateNotNullReturn(x.get("product"),null))
-                        .build()).collect(Collectors.toList());
+    public ResponseDTO<PageDTO<AnnualIndicatorsDTO>> annualIndicatorsList(ExportFilterDTO dto){
+
+        String sqlTemplate = "SELECT ex.year AS year, COUNT(ex.id) AS recordCount, SUM(ex.fobValue) as fobValue," +
+                "SUM(ex.netWeight) as netWeight, COUNT(DISTINCT ex.country) as marketsCount, COUNT(DISTINCT ex.agentAdua) as customsCount," +
+                "COUNT(DISTINCT ex.company) as companiesCount, COUNT(DISTINCT ex.ubigeo) as departmentsCount " +
+                "FROM ExportEntity ex ";
+
+        // Agregamos las condiciones a la consulta
+        List<String> predicates =new ArrayList<>();
+        if(!predicates.isEmpty()) sqlTemplate += String.format(" WHERE %s", String.join(" AND ", predicates));
+        sqlTemplate = sqlTemplate + " GROUP BY ex.year ORDER BY ex.year ASC ";
+        TypedQuery<Tuple> query = em.createQuery(sqlTemplate, Tuple.class);
+
+        // Paginación
+        query.setFirstResult(dto.getPage()*dto.getSize());
+        query.setMaxResults(dto.getSize());
+
+        PageDTO<AnnualIndicatorsDTO> pageDTO =new PageDTO<>(AnnualIndicatorsDTO.buildDto(query.getResultList()),dto.getPage(),0);
+        return new ResponseDTO<>(Constants.HTTP_STATUS_SUCCESSFUL, pageDTO);
+
     }
+
+
+    public ResponseDTO<ExportDTO> getById(String id){
+        return null;
+    }
+
 }
