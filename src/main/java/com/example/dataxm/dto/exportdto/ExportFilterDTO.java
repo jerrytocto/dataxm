@@ -7,8 +7,12 @@ import lombok.Setter;
 @Setter
 public class ExportFilterDTO {
 
-    private String description;
-    private String year;
+    private String description; // Descripción del producto
+    private String year; //Año
+    private String market; // Mercado
+    private String ubigeo; // Departamento
+    private String company; //Empresa
+    private String agentAdua; // Agente aduanas
     private Integer page;
     private Integer size;
 }

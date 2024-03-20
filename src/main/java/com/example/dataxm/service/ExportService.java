@@ -56,6 +56,11 @@ public class ExportService {
 
         // Agregamos las condiciones a la consulta
         List<String> predicates =new ArrayList<>();
+        ConfigTool.addFilterToPredicate(predicates, "ex.country = " + dto.getMarket(), dto.getMarket());
+        ConfigTool.addFilterToPredicate(predicates, "ex.company = " + dto.getCompany(), dto.getCompany());
+        ConfigTool.addFilterToPredicate(predicates, "ex.ubigeo = " + dto.getUbigeo(), dto.getUbigeo());
+        ConfigTool.addFilterToPredicate(predicates, "ex.agentAdua = " + dto.getAgentAdua(), dto.getAgentAdua());
+
         if(!predicates.isEmpty()) sqlTemplate += String.format(" WHERE %s", String.join(" AND ", predicates));
         sqlTemplate = sqlTemplate + " GROUP BY ex.year ORDER BY ex.year ASC ";
         TypedQuery<Tuple> query = em.createQuery(sqlTemplate, Tuple.class);
