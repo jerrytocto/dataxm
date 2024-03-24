@@ -49,8 +49,8 @@ public class ExportService {
 
     public ResponseDTO<PageDTO<IndicatorsDTO>> getIndicatorsList(ExportFilterDTO dto){
 
-        String sqlTemplate = dto.getYear()!=null?"SELECT MONTH(ex.shippingDate) AS month, ":"SELECT YEAR(ex.shippingDate) AS year, ";
-        sqlTemplate+= "COUNT(ex.id) AS recordCount, SUM(ex.fobValue) as fobValue," +
+        String sqlTemplate = (dto.getYear()!=null || dto.getSeasonality())?"SELECT MONTH(ex.shippingDate) AS month, ":"SELECT ";
+        sqlTemplate+= "YEAR(ex.shippingDate) AS year, COUNT(ex.id) AS recordCount, SUM(ex.fobValue) as fobValue," +
                 "SUM(ex.netWeight) as netWeight, COUNT(DISTINCT ex.country) as marketsCount, COUNT(DISTINCT ex.agentAdua) as customsCount," +
                 "COUNT(DISTINCT ex.company) as companiesCount, COUNT(DISTINCT ex.ubigeo) as departmentsCount " +
                 "FROM ExportEntity ex ";
@@ -62,11 +62,12 @@ public class ExportService {
         ConfigTool.addFilterToPredicate(predicates, "ex.company = " + dto.getCompany(), dto.getCompany());
         ConfigTool.addFilterToPredicate(predicates, "ex.ubigeo = " + dto.getUbigeo(), dto.getUbigeo());
         ConfigTool.addFilterToPredicate(predicates, "ex.agentAdua = " + dto.getAgentAdua(), dto.getAgentAdua());
-        if(!Objects.isNull(dto.getYear())) ConfigTool.addFilterToPredicate(predicates,"ex.year = "+dto.getYear(), dto.getYear());
-
+        if(!Objects.isNull(dto.getYear()) && !dto.getSeasonality()) ConfigTool.addFilterToPredicate(predicates,"ex.year = "+dto.getYear(), dto.getYear());
         if(!predicates.isEmpty()) sqlTemplate += String.format(" WHERE %s", String.join(" AND ", predicates));
-        if(dto.getYear()!=null){
-            sqlTemplate = sqlTemplate + " GROUP BY MONTH(ex.shippingDate) ORDER BY month ASC ";
+
+        // El año es null cuando es indicadores anuales, de lo contrario se obtiene indicadores mensuales
+        if(dto.getYear()!=null || dto.getSeasonality()){
+            sqlTemplate = sqlTemplate + " GROUP BY YEAR(ex.shippingDate), MONTH(ex.shippingDate) ORDER BY year ASC ";
         }else{
             sqlTemplate = sqlTemplate + " GROUP BY YEAR(ex.shippingDate) ORDER BY year ASC ";
         }

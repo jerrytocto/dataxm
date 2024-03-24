@@ -28,7 +28,7 @@ public class IndicatorsDTO {
 
     public static List<IndicatorsDTO> buildDto(List<Tuple> result){
         return result.stream().map( x -> IndicatorsDTO.builder()
-                .year(x.getElements().stream().anyMatch(e-> e.getAlias().equals("year"))? x.get("year").toString():null)
+                .year(x.get("year").toString())
                 .month(x.getElements().stream().anyMatch(e-> e.getAlias().equals("month"))? ConfigTool.getMonthName(Integer.parseInt(x.get("month").toString())) :null)
                 .fobValue(Double.valueOf(x.get("fobValue").toString()))
                 .netWeight(Double.valueOf(x.get("netWeight").toString()))
