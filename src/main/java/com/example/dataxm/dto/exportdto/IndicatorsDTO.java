@@ -25,11 +25,13 @@ public class IndicatorsDTO {
     private Integer marketsCount; // Cantidad de mercados
     private Integer departmentsCount; // Cantidad de departamentos
     private Integer customsCount; // Cantidad de aduanas
+    private String countryName; //
 
     public static List<IndicatorsDTO> buildDto(List<Tuple> result){
         return result.stream().map( x -> IndicatorsDTO.builder()
-                .year(x.get("year").toString())
+                .year(x.getElements().stream().anyMatch(e-> e.getAlias().equals("year"))? x.get("year").toString() :null)
                 .month(x.getElements().stream().anyMatch(e-> e.getAlias().equals("month"))? ConfigTool.getMonthName(Integer.parseInt(x.get("month").toString())) :null)
+                .countryName(x.getElements().stream().anyMatch(e-> e.getAlias().equals("country"))? x.get("country").toString() :null)
                 .fobValue(Double.valueOf(x.get("fobValue").toString()))
                 .netWeight(Double.valueOf(x.get("netWeight").toString()))
                 .recordCount(Integer.parseInt(x.get("recordCount").toString()))

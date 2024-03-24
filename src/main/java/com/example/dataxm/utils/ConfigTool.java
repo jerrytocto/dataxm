@@ -15,6 +15,7 @@ public class ConfigTool {
         if(data != null) return data.toString();
         return returnNull;
     }
+
     public static String getMonthName(int monthNumber) {
         DateFormatSymbols dfs = new DateFormatSymbols(new Locale("es"));
         return dfs.getMonths()[monthNumber - 1].toUpperCase();

@@ -22,6 +22,9 @@ public class ExportEntity {
     @Column(name = "PART_NANDI")
     private String item; // Partida
 
+    @Column(name="CADU")
+    private String codeAdu;
+
     @Column(name = "DCOM")
     private String description; //Descripción comercial
 
@@ -43,9 +46,10 @@ public class ExportEntity {
     @Column(name = "CAGE")
     private String agentAdua;
 
-    @Column(name = "CEMPTRA")
+    @Column(name = "DNOMPRO")
     private String company;
 
     @Column(name = "UBIGEO")
     private String ubigeo;
+
 }

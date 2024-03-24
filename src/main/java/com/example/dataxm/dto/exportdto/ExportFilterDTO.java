@@ -17,4 +17,5 @@ public class ExportFilterDTO {
     private Boolean seasonality=false; //Para obtener estacionalidad
     private Integer page;
     private Integer size;
+    private String codeFilter="";
 }
