@@ -1,5 +1,7 @@
 package com.example.dataxm.dto.exportdto;
 
+import com.example.dataxm.utils.ConfigTool;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Tuple;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,9 +13,11 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Builder
-public class AnnualIndicatorsDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class IndicatorsDTO {
 
     private String year; //año
+    private String month; //Fecha de embarque
     private Double fobValue; // Valor fob USD
     private Double netWeight; // Peso neto
     private Integer recordCount; // Cantidad de registros
@@ -22,9 +26,10 @@ public class AnnualIndicatorsDTO {
     private Integer departmentsCount; // Cantidad de departamentos
     private Integer customsCount; // Cantidad de aduanas
 
-    public static List<AnnualIndicatorsDTO> buildDto(List<Tuple> result){
-        return result.stream().map( x -> AnnualIndicatorsDTO.builder()
-                .year(x.get("year").toString())
+    public static List<IndicatorsDTO> buildDto(List<Tuple> result){
+        return result.stream().map( x -> IndicatorsDTO.builder()
+                .year(x.getElements().stream().anyMatch(e-> e.getAlias().equals("year"))? x.get("year").toString():null)
+                .month(x.getElements().stream().anyMatch(e-> e.getAlias().equals("month"))? ConfigTool.getMonthName(Integer.parseInt(x.get("month").toString())) :null)
                 .fobValue(Double.valueOf(x.get("fobValue").toString()))
                 .netWeight(Double.valueOf(x.get("netWeight").toString()))
                 .recordCount(Integer.parseInt(x.get("recordCount").toString()))

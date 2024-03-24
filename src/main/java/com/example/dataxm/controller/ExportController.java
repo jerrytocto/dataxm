@@ -1,12 +1,11 @@
 package com.example.dataxm.controller;
 
-import com.example.dataxm.dto.exportdto.AnnualIndicatorsDTO;
+import com.example.dataxm.dto.exportdto.IndicatorsDTO;
 import com.example.dataxm.dto.exportdto.ExportDTO;
 import com.example.dataxm.dto.exportdto.ExportFilterDTO;
 import com.example.dataxm.dto.PageDTO;
 import com.example.dataxm.dto.ResponseDTO;
 import com.example.dataxm.service.ExportService;
-import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,9 +25,9 @@ public class ExportController {
         return exportService.getList(dto);
     }
 
-    @GetMapping("annualIndicators")
-    public ResponseDTO<PageDTO<AnnualIndicatorsDTO>> annualIndicatorsList(ExportFilterDTO dto){
-        return exportService.annualIndicatorsList(dto);
+    @GetMapping("indicators")
+    public ResponseDTO<PageDTO<IndicatorsDTO>> getIndicatorsList(ExportFilterDTO dto){
+        return exportService.getIndicatorsList(dto);
     }
 
     @GetMapping("{id}")

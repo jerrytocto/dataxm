@@ -7,6 +7,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -25,6 +27,9 @@ public class ExportEntity {
 
     @Column(name = "VFOBSERDOL")
     private Double fobValue; // Valor fob de la serie
+
+    @Column(name = "FEMB")
+    private LocalDateTime shippingDate; // Fecha de embarque
 
     @Column(name = "VPESNET")
     private Double netWeight; // Peso neto

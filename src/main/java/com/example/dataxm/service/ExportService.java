@@ -1,7 +1,7 @@
 package com.example.dataxm.service;
 
 import com.example.dataxm.base.Constants;
-import com.example.dataxm.dto.exportdto.AnnualIndicatorsDTO;
+import com.example.dataxm.dto.exportdto.IndicatorsDTO;
 import com.example.dataxm.dto.exportdto.ExportDTO;
 import com.example.dataxm.dto.exportdto.ExportFilterDTO;
 import com.example.dataxm.dto.PageDTO;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 public class ExportService {
@@ -47,29 +47,36 @@ public class ExportService {
 
     }
 
-    public ResponseDTO<PageDTO<AnnualIndicatorsDTO>> annualIndicatorsList(ExportFilterDTO dto){
+    public ResponseDTO<PageDTO<IndicatorsDTO>> getIndicatorsList(ExportFilterDTO dto){
 
-        String sqlTemplate = "SELECT ex.year AS year, COUNT(ex.id) AS recordCount, SUM(ex.fobValue) as fobValue," +
+        String sqlTemplate = dto.getYear()!=null?"SELECT MONTH(ex.shippingDate) AS month, ":"SELECT YEAR(ex.shippingDate) AS year, ";
+        sqlTemplate+= "COUNT(ex.id) AS recordCount, SUM(ex.fobValue) as fobValue," +
                 "SUM(ex.netWeight) as netWeight, COUNT(DISTINCT ex.country) as marketsCount, COUNT(DISTINCT ex.agentAdua) as customsCount," +
                 "COUNT(DISTINCT ex.company) as companiesCount, COUNT(DISTINCT ex.ubigeo) as departmentsCount " +
                 "FROM ExportEntity ex ";
 
         // Agregamos las condiciones a la consulta
         List<String> predicates =new ArrayList<>();
+        predicates.add("ex.item =" + dto.getItem());
         ConfigTool.addFilterToPredicate(predicates, "ex.country = " + dto.getMarket(), dto.getMarket());
         ConfigTool.addFilterToPredicate(predicates, "ex.company = " + dto.getCompany(), dto.getCompany());
         ConfigTool.addFilterToPredicate(predicates, "ex.ubigeo = " + dto.getUbigeo(), dto.getUbigeo());
         ConfigTool.addFilterToPredicate(predicates, "ex.agentAdua = " + dto.getAgentAdua(), dto.getAgentAdua());
+        if(!Objects.isNull(dto.getYear())) ConfigTool.addFilterToPredicate(predicates,"ex.year = "+dto.getYear(), dto.getYear());
 
         if(!predicates.isEmpty()) sqlTemplate += String.format(" WHERE %s", String.join(" AND ", predicates));
-        sqlTemplate = sqlTemplate + " GROUP BY ex.year ORDER BY ex.year ASC ";
+        if(dto.getYear()!=null){
+            sqlTemplate = sqlTemplate + " GROUP BY MONTH(ex.shippingDate) ORDER BY month ASC ";
+        }else{
+            sqlTemplate = sqlTemplate + " GROUP BY YEAR(ex.shippingDate) ORDER BY year ASC ";
+        }
         TypedQuery<Tuple> query = em.createQuery(sqlTemplate, Tuple.class);
 
         // Paginación
         query.setFirstResult(dto.getPage()*dto.getSize());
         query.setMaxResults(dto.getSize());
 
-        PageDTO<AnnualIndicatorsDTO> pageDTO =new PageDTO<>(AnnualIndicatorsDTO.buildDto(query.getResultList()),dto.getPage(),0);
+        PageDTO<IndicatorsDTO> pageDTO =new PageDTO<>(IndicatorsDTO.buildDto(query.getResultList()),dto.getPage(),0);
         return new ResponseDTO<>(Constants.HTTP_STATUS_SUCCESSFUL, pageDTO);
 
     }
