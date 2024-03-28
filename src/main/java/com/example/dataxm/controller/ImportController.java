@@ -62,13 +62,23 @@ public class ImportController {
     }
 
     @GetMapping("/products")
-    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfProducts(@RequestBody ExportFilterDTO exportFilterDTO){
-        return importProductService.getListProductsWithYear(exportFilterDTO);
+    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfProducts(
+            @PathVariable String description,
+            @PathVariable String year,
+            @PathVariable int page,
+            @PathVariable int size
+    ){
+        return importProductService.getListProductsWithYear(description, year, page, size);
     }
 
     @GetMapping("/partidas")
-    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfPartida(@RequestBody ExportFilterDTO exportFilterDTO){
-        return importPartidaService.getListProductsWithYear(exportFilterDTO);
+    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfPartida(
+            String description,
+            String year,
+            int page,
+            int size
+    ){
+        return importPartidaService.getListProductsWithYear(description, year, page, size);
     }
 
     @GetMapping("/companies")
