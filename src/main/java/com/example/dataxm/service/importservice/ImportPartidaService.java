@@ -23,12 +23,12 @@ public class ImportPartidaService implements ImportFirstLevelService{
     private ImportRepository importRepository;
 
     @Override
-    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> getListProductsWithYear(String description, String year, int page2, int size) {
+    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> getListProductsWithYear(String parti, int year, int page2, int size) {
 
-        if(year.isEmpty() || year.isBlank()) year = (Year.now().toString());
-        if(description.isEmpty() || description.isBlank()) description = "6404190000";
 
-        List<Tuple> resultList = importRepository.findImportWhitPartida(description,Integer.parseInt(year) );
+        if(parti.isEmpty() || parti.isBlank()) parti = "6404190000";
+
+        List<Tuple> resultList = importRepository.findImportWhitPartida(parti,year );
 
         // Aplicar paginación a los resultados
         int totalResults = resultList.size();

@@ -23,12 +23,12 @@ public class ImportProductService implements ImportFirstLevelService{
     private ImportRepository importRepository;
 
     @Override
-    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> getListProductsWithYear(String description, String year, int page2, int size) {
+    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> getListProductsWithYear(String description, int year, int page2, int size) {
 
-        if(year.isEmpty() || year.isBlank()) year =  (Year.now().toString());
+
         if(description.isEmpty() || description.isBlank()) description = "laptop";
 
-        List<Tuple> resultList = importRepository.findImportProductsFirstLevel(description,Integer.parseInt(year) );
+        List<Tuple> resultList = importRepository.findImportProductsFirstLevel(description,year);
 
         // Aplicar paginación a los resultados
         int totalResults = resultList.size();

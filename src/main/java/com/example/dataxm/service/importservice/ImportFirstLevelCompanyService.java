@@ -12,7 +12,9 @@ import java.util.Optional;
 
 public interface ImportFirstLevelCompanyService {
 
-    ResponseDTO<PageDTO<ImportFirstLevelCompanyDTO>> getListProductsWithCompany(ImportFilterCompanyDTO dto);
+    ResponseDTO<PageDTO<ImportFirstLevelCompanyDTO>> getListProductsWithCompany(
+            String ruc, String company, int year, int page, int size
+    );
 
     List<ImportFirstLevelCompanyDTO> buildDto(List<Tuple> result);
 
