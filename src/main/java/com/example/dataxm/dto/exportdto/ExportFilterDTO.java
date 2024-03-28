@@ -15,7 +15,7 @@ public class ExportFilterDTO {
     private String company; //Empresa
     private String agentAdua; // Agente aduanas
     private Boolean seasonality=false; //Para obtener estacionalidad
-    private Integer page;
-    private Integer size;
+    private Integer page = 0;
+    private Integer size = 10;
     private String codeFilter="";
 }
