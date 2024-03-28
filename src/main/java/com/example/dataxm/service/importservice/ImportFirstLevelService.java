@@ -10,7 +10,8 @@ import java.util.List;
 
 public interface ImportFirstLevelService {
 
-    ResponseDTO<PageDTO<ImportFirstLevelDTO>> getListProductsWithYear(ExportFilterDTO dto);
+    ResponseDTO<PageDTO<ImportFirstLevelDTO>> getListProductsWithYear(
+            String description, int year, int page, int size);
 
     List<ImportFirstLevelDTO> buildDto(List<Tuple> result);
 }

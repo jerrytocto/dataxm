@@ -26,39 +26,40 @@ public class ImportCompanyService implements ImportFirstLevelCompanyService{
     private ImportCompanyRepository importCompanyRepository;
 
     @Override
-    public ResponseDTO<PageDTO<ImportFirstLevelCompanyDTO>> getListProductsWithCompany(ImportFilterCompanyDTO dto) {
+    public ResponseDTO<PageDTO<ImportFirstLevelCompanyDTO>> getListProductsWithCompany(
+            String ruc, String company, int year, int page2, int size
+    ) {
 
         Optional<Company> foundCompany = Optional.of(new Company());
         //Optional<List<Company>> listFountCompany =  Optional.of(new ArrayList<>());
         List<Tuple> resultList = new ArrayList<>() ;
 
-        if(dto.getYear().isEmpty() || dto.getYear().isBlank()) dto.setYear(Year.now().toString());
 
         //El campo company y ruc están vacíos
-        if(dto.getRuc().isEmpty() && dto.getCompany().isEmpty()){
-            resultList = importCompanyRepository.findImportsByCompanyOnlyYear(Integer.parseInt(dto.getYear()));
+        if(ruc.isEmpty() && ruc.isEmpty()){
+            resultList = importCompanyRepository.findImportsByCompanyOnlyYear(year);
         }
 
         //El campo ruc no esté en blanco ni vacío
-        if(!dto.getRuc().isBlank() && !dto.getRuc().isEmpty()) {
+        if(!ruc.isBlank() && !ruc.isEmpty()) {
 
-             foundCompany = findByRuc(dto.getRuc());
+             foundCompany = findByRuc(ruc);
              if(!foundCompany.isPresent()) return new ResponseDTO<>(Constants.HTTP_STATUS_SUCCESSFUL, "No existen registros");
              //Asigna el nombre de la empresa encontrada para luego filtrar en la base de datos
-             dto.setCompany(foundCompany.get().getBusinessName());
+             company = foundCompany.get().getBusinessName();
 
-             resultList = consultDB(dto);
+             resultList = consultDB(company, year);
         }
 
         //El campo company no esté en blanco ni vacío
-        if(!dto.getCompany().isBlank() && !dto.getCompany().isEmpty()) resultList = consultDB(dto);
+        if(!company.isBlank() && !company.isEmpty()) resultList = consultDB(company, year);
 
 
         // Aplicar paginación a los resultados
         int totalResults = resultList.size();
-        int pageSize = dto.getSize();
+        int pageSize = size;
         int totalPages = (int) Math.ceil((double) totalResults / pageSize);
-        int page = dto.getPage();
+        int page = page2;
         int startIndex = page * pageSize;
         int endIndex = Math.min(startIndex + pageSize, totalResults);
 
@@ -113,8 +114,8 @@ public class ImportCompanyService implements ImportFirstLevelCompanyService{
         return importCompanyRepository.findByBusinessNameContaining(businessName);
     }
 
-    private List<Tuple> consultDB(ImportFilterCompanyDTO dto){
-        List<Tuple> resultList = importCompanyRepository.findImportWhitCompany(dto.getCompany(),Integer.parseInt(dto.getYear()) );
+    private List<Tuple> consultDB( String company, int year){
+        List<Tuple> resultList = importCompanyRepository.findImportWhitCompany(company, year );
         return  resultList;
     }
 }

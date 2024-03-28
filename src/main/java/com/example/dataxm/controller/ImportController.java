@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.time.Year;
 
 @RestController
 @RequestMapping("v1/imports")
@@ -62,18 +63,34 @@ public class ImportController {
     }
 
     @GetMapping("/products")
-    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfProducts(@RequestBody ExportFilterDTO exportFilterDTO){
-        return importProductService.getListProductsWithYear(exportFilterDTO);
+    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfProducts(
+            @RequestParam(value = "description") String description,
+            @RequestParam(value = "year", defaultValue = "2024") int year,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "8") int size
+    ){
+        return importProductService.getListProductsWithYear(description, year, page, size);
     }
 
     @GetMapping("/partidas")
-    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfPartida(@RequestBody ExportFilterDTO exportFilterDTO){
-        return importPartidaService.getListProductsWithYear(exportFilterDTO);
+    public ResponseDTO<PageDTO<ImportFirstLevelDTO>> importsWithYearAndDescriptionOfPartida(
+            @RequestParam(value = "part") String part,
+            @RequestParam(value = "year", defaultValue = "2024") int yearPart,
+            @RequestParam(value = "page", defaultValue = "0") int pagePart,
+            @RequestParam(value = "size", defaultValue = "8") int sizePart
+    ){
+        return importPartidaService.getListProductsWithYear(part, yearPart, pagePart, sizePart);
     }
 
     @GetMapping("/companies")
-    public ResponseDTO<PageDTO<ImportFirstLevelCompanyDTO>> importsWithYearAndDescriptionOfCompany(@RequestBody ImportFilterCompanyDTO exportFilterDTO){
-        return importCompanyService.getListProductsWithCompany(exportFilterDTO);
+    public ResponseDTO<PageDTO<ImportFirstLevelCompanyDTO>> importsWithYearAndDescriptionOfCompany(
+            @RequestParam(value = "ruc") String ruc,
+            @RequestParam(value = "company") String company,
+            @RequestParam(value = "year", defaultValue = "2024") int yearCompany,
+            @RequestParam(value = "page", defaultValue = "0") int pageCompany,
+            @RequestParam(value = "size", defaultValue = "8") int sizeCompany
+    ){
+        return importCompanyService.getListProductsWithCompany(ruc, company, yearCompany, pageCompany, sizeCompany);
     }
 
     @GetMapping("/country")
@@ -83,6 +100,7 @@ public class ImportController {
 
     @GetMapping("/products/{id}")
     public ResponseDTO<ImportHomeDTOTwo> secondLevelProducts(@PathVariable Integer id, @RequestBody ImportSecondLevelFilterDTO dto) throws SQLException {
+        System.out.println("LLEGAS AQUÍ");
         return importSecondLevelProductsService.findProductsByDescriptionAndUser(dto);
     }
 
