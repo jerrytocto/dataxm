@@ -98,15 +98,21 @@ public class ImportController {
         return importCountryService.getListProductsWithCompany(exportFilterDTO);
     }
 
-    @GetMapping("/products/{id}")
-    public ResponseDTO<ImportHomeDTOTwo> secondLevelProducts(@PathVariable Integer id, @RequestBody ImportSecondLevelFilterDTO dto) throws SQLException {
+    @GetMapping("/products/search")
+    public ResponseDTO<ImportHomeDTOTwo> secondLevelProducts(
+            @RequestParam(value = "filter") String filter,
+            @RequestParam(value = "year", defaultValue = "2023") int year
+    ) throws SQLException {
         System.out.println("LLEGAS AQUÍ");
-        return importSecondLevelProductsService.findProductsByDescriptionAndUser(dto);
+        return importSecondLevelProductsService.findProductsByDescriptionAndUser(filter , year);
     }
 
-    @GetMapping("/partidas/{numberPartida}")
-    public ResponseDTO<ImportHomeDTOTwo> secondLevelPartida(@PathVariable Integer numberPartida, @RequestBody ImportSecondLevelFilterDTO dto) throws SQLException {
-        return importSecondLevelPartidaService.findByPartidaAndanio(dto);
+    @GetMapping("/partidas/search")
+    public ResponseDTO<ImportHomeDTOTwo> secondLevelPartida(
+            @RequestParam(value = "filter") String filter,
+            @RequestParam(value = "year", defaultValue = "2023") int year
+    ) throws SQLException {
+        return importSecondLevelPartidaService.findByPartidaAndanio(filter, year);
     }
 
     @GetMapping("/country/{codCountry}")

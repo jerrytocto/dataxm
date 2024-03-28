@@ -21,16 +21,16 @@ public class ImportSecondLevelPartidaService {
 
 
     //Método que busca al producto por su id y por su año
-    public ResponseDTO<ImportHomeDTOTwo> findByPartidaAndanio(ImportSecondLevelFilterDTO dto){
+    public ResponseDTO<ImportHomeDTOTwo> findByPartidaAndanio(String filter, int year){
 
-        if(dto.getFilter().isEmpty() || dto.getFilter().isBlank())
+        if(filter.isEmpty() || filter.isBlank())
             return new ResponseDTO<>(Constants.HTTP_STATUS_WARNING, "Se debe especificar una partida");
 
-        if(dto.getYear() > Year.now().getValue())
+        if(year > Year.now().getValue())
             return new ResponseDTO<>(Constants.HTTP_STATUS_WARNING, "El año debe ser menor que:  "+ Year.now().getValue());
 
 
-        Optional<Tuple> sqlResult = importRepository.secondLevelDeparture(dto.getFilter(), dto.getYear());
+        Optional<Tuple> sqlResult = importRepository.secondLevelDeparture(filter, year);
 
         if(!sqlResult.isPresent()) return new ResponseDTO<>(Constants.HTTP_STATUS_WARNING, "No se encontraron registros");
 
