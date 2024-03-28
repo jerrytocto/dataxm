@@ -20,4 +20,8 @@ public class ConfigTool {
         DateFormatSymbols dfs = new DateFormatSymbols(new Locale("es"));
         return dfs.getMonths()[monthNumber - 1].toUpperCase();
     }
+
+    public static Integer getTotalPages(Long totalRows, int size){
+        return Math.toIntExact(totalRows % size == 0 ? (totalRows / size) : (totalRows / size) + 1);
+    }
 }
