@@ -21,11 +21,13 @@ public class ExportDTO {
     private Double netWeight; // Peso neto
     private String sector; // Sector
     private String product; // Producto
+    private String year; //año
 
     public static List<ExportDTO> buildDto(List<Tuple> result){
         return result.stream().map( x -> ExportDTO.builder()
                 .id(x.get("id").toString())
                 .item(x.get("item").toString())
+                .year(x.get("year").toString())
                 .description(x.get("description").toString())
                 .fobValue(Double.valueOf(x.get("fobValue").toString()))
                 .netWeight(Double.valueOf(x.get("netWeight").toString()))

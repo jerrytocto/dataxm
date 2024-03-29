@@ -7,6 +7,9 @@ import com.example.dataxm.dto.exportdto.ExportFilterDTO;
 import com.example.dataxm.dto.PageDTO;
 import com.example.dataxm.dto.ResponseDTO;
 import com.example.dataxm.dto.exportdto.ResponseFilterCodeDTO;
+import com.example.dataxm.dto.importdto.request.ImportSecondLevelFilterDTO;
+import com.example.dataxm.dto.importdto.response.ImportHomeDTOTwo;
+import com.example.dataxm.repository.ExportRepository;
 import com.example.dataxm.utils.ConfigTool;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
@@ -14,10 +17,14 @@ import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
 public class ExportService {
+
+    @Autowired
+    ExportRepository exportRepository;
 
     @Autowired
     private EntityManager em;
@@ -28,7 +35,7 @@ public class ExportService {
 
         // Generamos la consulta
         String sqlTemplate = "SELECT ex.id as id, ex.item as item, ex.description as description, ex.fobValue as fobValue, " +
-                    "ex.netWeight as netWeight, p.sector as sector, p.product as product " + templateFrom;
+                    "ex.netWeight as netWeight, p.sector as sector, p.product as product, ex.year as year " + templateFrom;
 
         // Agregamos las condiciones a la consulta
         List<String> predicates =new ArrayList<>();
@@ -51,6 +58,23 @@ public class ExportService {
         PageDTO<ExportDTO> pageDTO =new PageDTO<>(ExportDTO.buildDto(query.getResultList()),dto.getPage(),totalRows,totalPages);
         return new ResponseDTO<>(Constants.HTTP_STATUS_SUCCESSFUL, pageDTO);
 
+    }
+
+    //Método que busca al producto por su id y por su año
+    public ResponseDTO<ImportHomeDTOTwo> findProductsByDescriptionAndYear(ImportSecondLevelFilterDTO dto){
+
+        Optional<Tuple>  sqlResult = exportRepository.findByProductsIdAndYear(dto.getFilter(), dto.getYear());
+        ImportHomeDTOTwo importHomeDTO = ImportHomeDTOTwo.builder()
+                .description(sqlResult.get().get("description").toString())
+                .year(sqlResult.get().get("year").toString())
+                .departure(Integer.parseInt(ConfigTool.validateNotNullReturn(sqlResult.get().get("departure"),"0")))
+                .companies(Integer.parseInt(ConfigTool.validateNotNullReturn(sqlResult.get().get("companies"),"0")))
+                .markets(Integer.parseInt(ConfigTool.validateNotNullReturn(sqlResult.get().get("markets"),"0")))
+                .valueFOB(BigDecimal.valueOf(Double.parseDouble(ConfigTool.validateNotNullReturn(sqlResult.get().get("valueFOB"),"0"))))
+                .netWeight(BigDecimal.valueOf(Double.parseDouble(ConfigTool.validateNotNullReturn(sqlResult.get().get("netWeight"),"0"))))
+                .build();
+
+        return new ResponseDTO<>(Constants.HTTP_STATUS_SUCCESSFUL, importHomeDTO);
     }
 
     public ResponseDTO<PageDTO<IndicatorsDTO>> getIndicatorsList(ExportFilterDTO dto){
